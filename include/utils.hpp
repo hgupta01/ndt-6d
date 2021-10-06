@@ -13,10 +13,26 @@
 // Eigen
 #include "eigen3/Eigen/Dense"
 
+#include <pcl/point_cloud.h>
+#include <pcl/point_types.h>
+#include <pcl/common/common.h>
+#include <pcl/filters/voxel_grid.h>
+#include <pcl/filters/passthrough.h> 
+#include <pcl/visualization/pcl_visualizer.h>
+#include <pcl/filters/radius_outlier_removal.h>
+
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+
 // Ceres
 #include "ceres/ceres.h"
 #include "ceres/jet.h"
 
+#include <ndt_base_map.h>
+
+typedef pcl::PointXYZRGB PointC;
+typedef pcl::PointCloud<pcl::PointXYZRGB> ColorPC;
 
 class NDTCostFunction : public ceres::FirstOrderFunction {
 private:
@@ -53,5 +69,9 @@ Eigen::Affine3d parameterArrayToAffine(
 void affineToParameterArray(
       const Eigen::Affine3d& transformation, double* parameters_out);
 
+void RGBDtoPCL(cv::Mat color_image, cv::Mat depth_image, ColorPC::Ptr pointcloud);
+void PCFilter(ColorPC::Ptr pointcloud, ColorPC::Ptr cloud_filtered);
+
+ndt::NDTBaseMap RGBD2NDTMap(std::string cimg, std::string dimg);
 
 #endif

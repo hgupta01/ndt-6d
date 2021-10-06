@@ -1,12 +1,19 @@
 #include <ndt_registration_6d.h>
 
-NDTRegistration6D::NDTRegistration6D(const double *fixed_map,
-                                     const size_t n_cells_fixed,
-                                     const double *movable_map,
-                                     const size_t n_cells_movable) {
+NDTRegistration6D::NDTRegistration6D(Eigen::MatrixXd fixed_pointmatrix,
+                                     Eigen::MatrixXd movable_pointmatrix,
+                                     std::vector<Eigen::Matrix3d> fixed_cov,
+                                     std::vector<Eigen::Matrix3d> movable_cov,
+                                     Eigen::MatrixXd fixed_pointmatrix6D,
+                                     Eigen::MatrixXd movable_pointmatrix6D) {
   
-  loadMap(fixed_map, n_cells_fixed, fixed_pointmatrix_, fixed_pointmatrix6D_, fixed_cov_);
-  loadMap(movable_map, n_cells_movable, movable_pointmatrix_, movable_pointmatrix6D_, movable_cov_);
+  fixed_pointmatrix_ = fixed_pointmatrix;
+  movable_pointmatrix_ = movable_pointmatrix;
+  fixed_cov_ = fixed_cov;
+  movable_cov_ = movable_cov;
+  fixed_pointmatrix6D_ = fixed_pointmatrix6D;
+  movable_pointmatrix6D_ = movable_pointmatrix6D;
+
 
   this->initial_guess_ = Eigen::Affine3d::Identity();
   this->result_ = Eigen::Affine3d::Identity();
@@ -19,10 +26,8 @@ NDTRegistration6D::NDTRegistration6D(const double *fixed_map,
   kdtree.setChecks(32);
   kdtree.setSorted(true);
   kdtree.setMaxDistance(1.0);
-  kdtree.setThreads(50);
-  std::cout << "everything is okay till here" <<std::endl;
+  kdtree.setThreads(8);
   kdtree.build();
-  
 }
 
 NDTRegistration6D::~NDTRegistration6D() {
@@ -31,7 +36,7 @@ NDTRegistration6D::~NDTRegistration6D() {
 }
 
 
-double NDTRegistration6D::NDTD2DRegistration(double* transformation) {
+double NDTRegistration6D::NDTD2DRegistration(Eigen::Matrix4d& transformation) {
   int num_itr = 0;
   double final_cost;
   
@@ -74,23 +79,22 @@ double NDTRegistration6D::NDTD2DRegistration(double* transformation) {
     num_itr++;
   }
 
-  matrix2Array(result_.matrix(), transformation);
-  // std::cout << "final cost: " << final_cost << "\n";
+  transformation = result_.matrix();
   return final_cost;
 
 }
 
-extern "C" 
-{
-  NDTRegistration6D *NDTRegistration_map(const double *fixed_map,
-                                         const size_t n_cells_fixed,
-                                         const double *movable_map,
-                                         const size_t n_cells_movable) {
-    return new NDTRegistration6D(fixed_map, n_cells_fixed, movable_map, n_cells_movable);
-  }
+// extern "C" 
+// {
+//   NDTRegistration6D *NDTRegistration_map(const double *fixed_map,
+//                                          const size_t n_cells_fixed,
+//                                          const double *movable_map,
+//                                          const size_t n_cells_movable) {
+//     return new NDTRegistration6D(fixed_map, n_cells_fixed, movable_map, n_cells_movable);
+//   }
 
 
-  double NDTRegistration_d2d(NDTRegistration6D *reg, double *transformation) {
-    return reg->NDTD2DRegistration(transformation);
-  }
-}
+//   double NDTRegistration_d2d(NDTRegistration6D *reg, double *transformation) {
+//     return reg->NDTD2DRegistration(transformation);
+//   }
+// }

@@ -24,12 +24,14 @@ protected:
   knn::KDTreeFlannd kdtree;
 
 public:
-  NDTRegistration6D(const double *fixed_map,
-                    const size_t n_cells_fixed,
-                    const double *movable_map,
-                    const size_t n_cells_movable);
+  NDTRegistration6D(Eigen::MatrixXd fixed_pointmatrix,
+                    Eigen::MatrixXd movable_pointmatrix,
+                    std::vector<Eigen::Matrix3d> fixed_cov,
+                    std::vector<Eigen::Matrix3d> movable_cov,
+                    Eigen::MatrixXd fixed_pointmatrix6D,
+                    Eigen::MatrixXd movable_pointmatrix6D);
 
   ~NDTRegistration6D();
 
-  double NDTD2DRegistration(double* transformation);
+  double NDTD2DRegistration(Eigen::Matrix4d& transformation);
 };

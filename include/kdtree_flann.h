@@ -29,7 +29,7 @@ private:
 
 public:
   KDTreeFlann()
-      : dataCopy_(), dataPoints_(nullptr),
+      : dataCopy_(), dataPoints_(nullptr), index_(nullptr),
         searchParams_(32, 0, false),
         indexParams_(flann::KDTreeSingleIndexParams(15)), maxDist_(0) {}
 

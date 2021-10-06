@@ -3,8 +3,6 @@ project(ndt_registration_knn)
 
 set(CMAKE_SHARED_MODULE_PREFIX "")
 
-#SET(GCC_COVERAGE_LINK_FLAGS "-lflann_cpp")
-#SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
 
 find_package(PkgConfig)
 pkg_check_modules(PC_FLANN flann)
@@ -19,6 +17,14 @@ if(OPENMP_FOUND)
     set (CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 endif(OPENMP_FOUND)
 
+find_package(PCL REQUIRED)
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
+set( OpenCV_DIR "/home/onepiece/.local/lib/cmake/opencv4" )
+find_package(OpenCV REQUIRED)
+
 include_directories(
   include
   ${EIGEN3_INCLUDE_DIR}
@@ -29,11 +35,13 @@ if(UNIX)
   set(LZ4_LIBRARIES "/usr/lib/x86_64-linux-gnu/liblz4.so")
 endif()
 
-add_library(ndt_registration_knn MODULE src/ndt_registration_6d.cpp src/utils.cpp)
-# add_executable(ndt_registration_knn main.cpp src/ndt_registration_6d.cpp src/utils.cpp)
+# add_library(ndt_registration_knn MODULE src/ndt_registration_6d.cpp src/utils.cpp)
+add_executable(ndt_registration_knn main.cpp src/ndt_registration_6d.cpp src/utils.cpp)
 target_link_libraries(ndt_registration_knn
   ${OpenMP_LIBS}
   ${CERES_LIBRARIES}
   ${LZ4_LIBRARIES}
   ${YAML_CPP_LIBRARIES}
+  ${PCL_LIBRARIES} 
+  ${OpenCV_LIBS}
 )
