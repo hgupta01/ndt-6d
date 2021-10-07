@@ -127,14 +127,14 @@ void visualizeSinglePC(ColorPC::Ptr pc){
         viewer->spinOnce(100);
 }
 
-void visualizePCPairs(ColorPC::Ptr srcpc, ColorPC::Ptr trgpc, Eigen::Matrix4f transform){
+void visualizePCPairs(ColorPC::Ptr srcpc, ColorPC::Ptr trgpc, Eigen::Matrix4f transform, std::string window_name){
 
     // Executing the transformation
     ColorPC::Ptr transformed_cloud (new ColorPC);
     pcl::transformPointCloud (*srcpc, *transformed_cloud, transform);
 
     // Visualize Point Cloud
-    pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
+    pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer (window_name));
     viewer->setBackgroundColor (255, 255, 255);
     pcl::visualization::PointCloudColorHandlerRGBField<PointC> rgb(srcpc);
     viewer->addPointCloud<PointC> (transformed_cloud, rgb, "src");
@@ -144,5 +144,5 @@ void visualizePCPairs(ColorPC::Ptr srcpc, ColorPC::Ptr trgpc, Eigen::Matrix4f tr
     viewer->addCoordinateSystem (1.0);
     viewer->initCameraParameters ();
     while (!viewer->wasStopped())
-        viewer->spinOnce(100);
+        viewer->spinOnce(100);    
 }

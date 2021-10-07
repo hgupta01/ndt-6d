@@ -5,10 +5,10 @@ set(CMAKE_SHARED_MODULE_PREFIX "")
 
 
 find_package(PkgConfig)
-pkg_check_modules(PC_FLANN flann)
+pkg_check_modules(PC_FLANN flann) # for knn
 
 find_package(yaml-cpp REQUIRED)
-find_package(Ceres REQUIRED)
+find_package(Ceres REQUIRED) # for optimization
 find_package(Eigen3 3.3.4 REQUIRED)
 find_package(OpenMP REQUIRED)
 if(OPENMP_FOUND)
@@ -22,8 +22,8 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-set( OpenCV_DIR "/home/onepiece/.local/lib/cmake/opencv4" )
-find_package(OpenCV REQUIRED)
+#set( OpenCV_DIR "/home/onepiece/.local/lib/cmake/opencv4" )
+find_package(OpenCV REQUIRED) # for reading he images
 
 include_directories(
   include
@@ -35,7 +35,7 @@ if(UNIX)
   set(LZ4_LIBRARIES "/usr/lib/x86_64-linux-gnu/liblz4.so")
 endif()
 
-# add_library(ndt_registration_knn MODULE src/ndt_registration_6d.cpp src/utils.cpp)
+
 add_executable(main src/main.cpp)
 target_link_libraries(main
   ${OpenMP_LIBS}

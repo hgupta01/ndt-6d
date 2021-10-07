@@ -1,0 +1,5 @@
+src_color: /home/onepiece/Dataset/Greenhouse/Vineyard/bag_prependicular/color/25.jpg
+src_depth: /home/onepiece/Dataset/Greenhouse/Vineyard/bag_prependicular/depth/25.png
+trg_color: /home/onepiece/Dataset/Greenhouse/Vineyard/bag_prependicular/color/20.jpg
+trg_depth: /home/onepiece/Dataset/Greenhouse/Vineyard/bag_prependicular/depth/20.png
+grid_size: 0.15
