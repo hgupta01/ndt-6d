@@ -36,8 +36,8 @@ if(UNIX)
 endif()
 
 # add_library(ndt_registration_knn MODULE src/ndt_registration_6d.cpp src/utils.cpp)
-add_executable(ndt_registration_knn main.cpp src/ndt_registration_6d.cpp src/utils.cpp)
-target_link_libraries(ndt_registration_knn
+add_executable(main src/main.cpp)
+target_link_libraries(main
   ${OpenMP_LIBS}
   ${CERES_LIBRARIES}
   ${LZ4_LIBRARIES}

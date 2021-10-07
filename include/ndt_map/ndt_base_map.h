@@ -11,9 +11,8 @@
 #include "eigen3/Eigen/Dense"
 
 // NDT
-#include "hash_grid_3d.h"
-#include "ndt_base_3d_cell.h"
-#include "utils.hpp"
+#include "ndt_map/hash_grid_3d.h"
+#include "ndt_map/ndt_base_3d_cell.h"
 
 namespace ndt
 {
